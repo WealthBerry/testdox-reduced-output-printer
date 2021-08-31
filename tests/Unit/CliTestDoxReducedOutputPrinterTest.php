@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Wealthberry\TestDox\Tests;
+namespace Wealthberry\TestDox\Tests\Unit;
 
 use PHPUnit\Framework\Error;
 use PHPUnit\Framework\TestCase;
