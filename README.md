@@ -1,8 +1,8 @@
 # testdox-reduced-output-printer
 
 [![Build](https://github.com/wealthberry/testdox-reduced-output-printer/workflows/Build/badge.svg?event=push)](https://github.com/wealthberry/testdox-reduced-output-printer/actions?query=workflow%3ABuild+event%3Apush)
-[![Latest Stable Version](https://poser.pugx.org/wealthberry/testdox-reduced-output-printer/v/stable)](https://packagist.org/wealthberry/testdox-reduced-output-printer)
-[![Total Downloads](https://poser.pugx.org/wealthberry/testdox-reduced-output-printer/downloads)](https://packagist.org/wealthberry/testdox-reduced-output-printer)
+[![Latest Stable Version](https://poser.pugx.org/wealthberry/testdox-reduced-output-printer/v/stable)](https://packagist.org/packages/wealthberry/testdox-reduced-output-printer)
+[![Total Downloads](https://poser.pugx.org/wealthberry/testdox-reduced-output-printer/downloads)](https://packagist.org/packages/wealthberry/testdox-reduced-output-printer)
 [![License](https://poser.pugx.org/wealthberry/testdox-reduced-output-printer/license)](https://packagist.org/packages/wealthberry/testdox-reduced-output-printer)
 
 A PHPUnit result printer based on CliTestDoxPrinter, but with reduced output line count and line length.
