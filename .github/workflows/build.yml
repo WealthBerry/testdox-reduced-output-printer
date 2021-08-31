@@ -1,0 +1,44 @@
+name: Build
+on:
+  push:
+      branches:
+          - master
+  pull_request:
+      branches:
+          - master
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+      - name: Composer cache dir
+        id: composer-cache
+        run: echo "::set-output name=dir::$HOME/.composer"
+      - name: Composer Install
+        run: docker run --volume "$PWD:/app" --volume "$HOME/.composer:$HOME/.composer" composer install --no-progress --no-suggest --optimize-autoloader
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          key: ${{ hashFiles('**/composer.json') }}
+          path: ${{ steps.composer-cache.outputs.dir }}
+      - name: Test
+        run: docker run --volume "$PWD:/app" composer test > test_results.txt
+      - name: Show results
+        run: echo test_results.txt
+      - name: Comment test results on PR
+        uses: actions/github-script@v4
+        if: github.event_name == 'pull_request'
+        with:
+          script: |
+            const fs = require('fs')
+            github.issues.createComment({
+               issue_number: context.issue.number,
+               owner: context.repo.owner,
+               repo: context.repo.repo,
+               body: fs.readFileSync('/home/ubuntu/testdox-reduced-output-printer/test_results.txt', 'utf8')
+            })
+
+
+
