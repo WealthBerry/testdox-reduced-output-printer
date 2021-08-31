@@ -26,7 +26,7 @@ jobs:
       - name: Test
         run: docker run --volume "$PWD:/app" composer test > test_results.txt
       - name: Show results
-        run: echo test_results.txt
+        run: cat test_results.txt
       - name: Comment test results on PR
         uses: actions/github-script@v4
         if: github.event_name == 'pull_request'
