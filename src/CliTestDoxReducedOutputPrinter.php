@@ -8,8 +8,8 @@ use Throwable;
 
 class CliTestDoxReducedOutputPrinter extends CliTestDoxPrinter
 {
-    const MAX_LINE_LENGTH = 100;
-    const MAX_LINES = 2;
+    const MAX_LINE_LENGTH = 200;
+    const MAX_LINES = 6;
 
     protected function formatThrowable(Throwable $t, ?int $status = null): string
     {
