@@ -37,7 +37,7 @@ jobs:
                issue_number: context.issue.number,
                owner: context.repo.owner,
                repo: context.repo.repo,
-               body: fs.readFileSync('/home/ubuntu/testdox-reduced-output-printer/test_results.txt', 'utf8')
+               body: fs.readFileSync(process.env.GITHUB_WORKSPACE + '/test_results.txt', 'utf8')
             })
 
 
