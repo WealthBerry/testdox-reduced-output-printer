@@ -1,22 +1,25 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
+
 namespace Wealthberry\TestDox;
 
 use PHPUnit\Framework\AssertionFailedError;
+use PHPUnit\Framework\IncompleteTestError;
+use PHPUnit\Framework\RiskyTestError;
+use PHPUnit\Framework\SkippedTestError;
 use PHPUnit\Framework\TestResult;
 use PHPUnit\Framework\Warning;
-use PHPUnit\Util\Test;
 use PHPUnit\Util\TestDox\CliTestDoxPrinter;
 use Throwable;
 
 class CliTestDoxReducedOutputPrinter extends CliTestDoxPrinter
 {
     private const int MAX_LINE_LENGTH = 200;
-    private const int MAX_LINES = 150;
+    private const int MAX_LINES       = 150;
 
-    private ?string $tempFile = null;
-    private mixed $tempFileHandle = null;
-    private int $failureCount = 0;
+    private ?string $tempFile       = null;
+    private mixed   $tempFileHandle = null;
+    private int     $failureCount   = 0;
 
     public function __construct(
         $out = null,
@@ -24,7 +27,7 @@ class CliTestDoxReducedOutputPrinter extends CliTestDoxPrinter
         string $colors = self::COLOR_DEFAULT,
         bool $debug = false,
         $numberOfColumns = 80,
-        bool $reverse = false
+        bool $reverse = false,
     )
     {
         $this->initTempFile();
@@ -60,19 +63,19 @@ class CliTestDoxReducedOutputPrinter extends CliTestDoxPrinter
         $lines = explode("\n", parent::formatThrowable($t, $status));
         $originalLines = count($lines);
         if ($originalLines > self::MAX_LINES) {
-            $lines = array_slice($lines, 0,self::MAX_LINES);
+            $lines = array_slice($lines, 0, self::MAX_LINES);
             $lines[] = '(' . $originalLines - self::MAX_LINES . ' more lines...)';
         }
 
         return implode(
             "\n",
             array_map(
-                function (string $lineMessage) : string {
+                function (string $lineMessage): string {
                     return strlen($lineMessage) > self::MAX_LINE_LENGTH ?
                         substr($lineMessage, 0, self::MAX_LINE_LENGTH) . '(...)' :
                         $lineMessage;
-                }, $lines
-            )
+                }, $lines,
+            ),
         );
     }
 
@@ -83,7 +86,8 @@ class CliTestDoxReducedOutputPrinter extends CliTestDoxPrinter
     }
 
     private function printFailedTests(): void
-    {;
+    {
+        ;
         if ($this->failureCount === 0) {
             return;
         }
@@ -105,7 +109,7 @@ class CliTestDoxReducedOutputPrinter extends CliTestDoxPrinter
                 "\n%d) %s::%s\n",
                 $index++,
                 $failureData['class'],
-                $failureData['method']
+                $failureData['method'],
             ));
             $this->write($failureData['exception'] . "\n");
         }
@@ -124,24 +128,25 @@ class CliTestDoxReducedOutputPrinter extends CliTestDoxPrinter
     private function writeFailureToFile(\PHPUnit\Framework\Test $test, Throwable $e, float $time): void
     {
         // Skip non-error/failure issues
-        if (($e instanceof \PHPUnit\Framework\SkippedTestError) ||
-            ($e instanceof \PHPUnit\Framework\IncompleteTestError) ||
-            ($e instanceof \PHPUnit\Framework\RiskyTestError) ||
-            ($e instanceof \PHPUnit\Framework\Warning)
+        if ($e instanceof SkippedTestError ||
+            $e instanceof IncompleteTestError ||
+            $e instanceof RiskyTestError ||
+            $e instanceof Warning
         ) {
             return;
         }
 
         if ($this->tempFileHandle) {
             $failureData = [
-                'class' => get_class($test),
-                'method' => $test->getName(),
+                'class'     => get_class($test),
+                'method'    => $test->getName(),
                 'exception' => $this->formatThrowable($e),
-                'time' => $time
+                'time'      => $time,
             ];
 
             fwrite($this->tempFileHandle, json_encode($failureData) . "\n");
             $this->failureCount++;
         }
     }
+
 }
