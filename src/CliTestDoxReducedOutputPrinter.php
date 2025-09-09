@@ -31,6 +31,7 @@ class CliTestDoxReducedOutputPrinter extends CliTestDoxPrinter
     )
     {
         $this->initTempFile();
+
         parent::__construct($out, $verbose, $colors, $debug, $numberOfColumns, $reverse);
     }
 
