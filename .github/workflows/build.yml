@@ -12,19 +12,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Composer cache dir
         id: composer-cache
         run: echo "::set-output name=dir::$HOME/.composer"
       - name: Composer Install
         run: docker run --volume "$PWD:/app" --volume "$HOME/.composer:$HOME/.composer" composer install --no-progress --no-suggest --optimize-autoloader
       - name: Cache dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           key: ${{ hashFiles('**/composer.json') }}
           path: ${{ steps.composer-cache.outputs.dir }}
       - name: Test
-        run: docker run --volume "$PWD:/app" composer test > test_results.txt
+        run: docker run --user "$(id -u):$(id -g)" --volume "$PWD:/app" composer test > test_results.txt || true
       - name: Show results
         run: cat test_results.txt
       - name: Comment test results on PR
