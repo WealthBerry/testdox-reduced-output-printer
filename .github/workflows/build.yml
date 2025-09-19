@@ -24,7 +24,7 @@ jobs:
           key: ${{ hashFiles('**/composer.json') }}
           path: ${{ steps.composer-cache.outputs.dir }}
       - name: Test
-        run: docker run --user "$(id -u):$(id -g)" --volume "$PWD:/app" composer test > test_results.txt || true
+        run: docker run --user "$(id -u):$(id -g)" --volume "$PWD:/app" composer test > test_results.txt
       - name: Show results
         run: cat test_results.txt
       - name: Comment test results on PR
